@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-metroapp2021-dev-95750-authRole",
+      "UnauthRoleArn": "arn:aws:iam::406681817394:role/amplify-metroapp2021-dev-95750-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::406681817394:role/amplify-metroapp2021-dev-95750-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-metroapp2021-dev-95750-deployment",
+      "UnauthRoleName": "amplify-metroapp2021-dev-95750-unauthRole",
+      "StackName": "amplify-metroapp2021-dev-95750",
+      "StackId": "arn:aws:cloudformation:us-east-1:406681817394:stack/amplify-metroapp2021-dev-95750/8c163600-bf1f-11ec-8d04-120c2983ccdf",
+      "AmplifyAppId": "d3u4umf5lp94ac"
+    }
+  }
+}

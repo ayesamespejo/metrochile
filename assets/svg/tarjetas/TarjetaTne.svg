@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="TNE" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580.78 435">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #29657c;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        stroke-width: 0px;
+      }
+
+      .cls-5, .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-5, .cls-6 {
+        font-family: Gotham-Black, 'Gotham Black';
+        font-size: 62.72px;
+        font-weight: 800;
+      }
+
+      .cls-2 {
+        fill: #c4c4c4;
+      }
+
+      .cls-6 {
+        fill: #182c51;
+      }
+
+      .cls-4 {
+        fill: #7e8dbc;
+      }
+    </style>
+  </defs>
+  <rect class="cls-4" width="580" height="435" rx="53.02" ry="53.02"/>
+  <circle class="cls-1" cx="493.61" cy="84.39" r="45.32"/>
+  <text class="cls-6" transform="translate(201.54 131.33)"><tspan x="0" y="0">TNE</tspan></text>
+  <text class="cls-5" transform="translate(473.01 107.94)"><tspan x="0" y="0">S</tspan></text>
+  <g>
+    <rect class="cls-2" x="23.05" y="200.75" width="179.93" height="179.93"/>
+    <g>
+      <path class="cls-3" d="m113.02,223.92c5.94,0,11.76,1.76,16.7,5.07,4.94,3.3,8.8,8,11.07,13.49,2.28,5.49,2.87,11.54,1.71,17.37-1.16,5.83-4.02,11.19-8.23,15.39-4.2,4.2-9.56,7.07-15.39,8.23-5.83,1.16-11.87.56-17.37-1.71-5.49-2.28-10.19-6.13-13.49-11.07-3.3-4.94-5.07-10.75-5.07-16.7,0-7.97,3.17-15.62,8.8-21.25,5.64-5.64,13.28-8.8,21.25-8.8Z"/>
+      <path class="cls-3" d="m59.63,337c.12-8.77,3.68-17.14,9.92-23.31,6.24-6.16,14.66-9.62,23.43-9.62h40.08c8.77,0,17.19,3.46,23.43,9.62,6.24,6.16,9.81,14.54,9.92,23.31-14.65,13.2-33.67,20.51-53.39,20.51s-38.74-7.31-53.39-20.51Z"/>
+    </g>
+  </g>
+</svg>

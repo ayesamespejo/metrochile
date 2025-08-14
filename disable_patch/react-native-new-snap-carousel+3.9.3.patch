@@ -1,0 +1,74 @@
+diff --git a/node_modules/react-native-new-snap-carousel/src/carousel/Carousel.js b/node_modules/react-native-new-snap-carousel/src/carousel/Carousel.js
+index 1c94934..2818879 100644
+--- a/node_modules/react-native-new-snap-carousel/src/carousel/Carousel.js
++++ b/node_modules/react-native-new-snap-carousel/src/carousel/Carousel.js
+@@ -1195,6 +1195,7 @@ export default class Carousel extends Component {
+         }
+     }
+ 
++    /*
+     _renderItem ({ item, index }) {
+         const { interpolators } = this.state;
+         const {
+@@ -1239,7 +1240,60 @@ export default class Carousel extends Component {
+                 { renderItem({ item, index }, parallaxProps) }
+             </Component>
+         );
+-    }
++    }*/
++   _renderItem({ item, index }) {
++    const { interpolators } = this.state;
++    const {
++        hasParallaxImages,
++        itemWidth,
++        itemHeight,
++        keyExtractor,
++        renderItem,
++        sliderHeight,
++        sliderWidth,
++        slideStyle,
++        vertical
++    } = this.props;
++
++    const animatedValue = interpolators && interpolators[index];
++
++    if (!animatedValue && animatedValue !== 0) {
++        return null;
++    }
++
++    const animate = this._shouldAnimateSlides();
++    const Component = animate ? Animated.View : View;
++    const animatedStyle = animate ? this._getSlideInterpolatedStyle(index, animatedValue) : {};
++
++    const parallaxProps = hasParallaxImages ? {
++        scrollPosition: this._scrollPos,
++        carouselRef: this._carouselRef,
++        vertical,
++        sliderWidth,
++        sliderHeight,
++        itemWidth,
++        itemHeight
++    } : undefined;
++
++    const mainDimension = vertical ? { height: itemHeight } : { width: itemWidth };
++
++    const key = this._needsScrollView()
++        ? keyExtractor
++            ? keyExtractor(item, index)
++            : this._getKeyExtractor(item, index)
++        : undefined;
++
++    return (
++        <Component
++            key={key}
++            style={[mainDimension, slideStyle, animatedStyle]}
++            pointerEvents={'box-none'}
++        >
++            { renderItem({ item, index }, parallaxProps) }
++        </Component>
++    );
++}
++
+ 
+     _getComponentOverridableProps () {
+         const {

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/metroApp/{registroId}": {
+      "name": "/metroApp/{registroId}",
+      "lambdaFunction": "metroapp2021973e9698",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

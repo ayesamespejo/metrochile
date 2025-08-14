@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Estado_de_la_red" data-name="Estado de la red" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 585.11 585.11">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <circle class="cls-2" cx="292.55" cy="292.55" r="291"/>
+  <circle class="cls-1" cx="292.55" cy="292.55" r="259.51"/>
+  <path class="cls-2" d="m292.55,320.25c-15.23,0-27.7-12.47-27.7-27.7v-110.8c0-15.23,12.46-27.7,27.7-27.7s27.7,12.46,27.7,27.7v110.8c0,15.23-12.47,27.7-27.7,27.7Zm27.7,110.8h-55.4v-55.4h55.4v55.4Z"/>
+</svg>

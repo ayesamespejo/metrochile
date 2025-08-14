@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 583.15 582.48">
+  <circle cx="291.59" cy="291.24" r="291" stroke-width="0"/>
+  <g id="Nuevos_proyectos" data-name="Nuevos proyectos">
+    <path d="m130.59,153.85h188.48c35.22,0,63.77,37.05,63.77,82.76v225.31" stroke="#fff" stroke-miterlimit="10" stroke-width="68"/>
+    <g>
+      <rect x="113.59" y="340.53" width="32.5" height="68" fill="#fff" stroke-width="0"/>
+      <path d="m415.48,408.53h-66.54v-68h66.54v68Zm-86.79,0h-74.18v-68h74.18v68Zm-91.29,0h-74.18v-68h74.18v68Z" fill="#fff" stroke-width="0"/>
+      <rect x="437.09" y="340.53" width="32.5" height="68" fill="#fff" stroke-width="0"/>
+    </g>
+    <circle cx="197.77" cy="375.08" r="19.83" stroke-width="0"/>
+    <g>
+      <circle cx="382.85" cy="375.08" r="33.29" fill="#fff" stroke-width="0"/>
+      <circle cx="382.85" cy="375.08" r="19.83" stroke-width="0"/>
+    </g>
+    <g>
+      <circle cx="383.85" cy="261.7" r="33.29" fill="#fff" stroke-width="0"/>
+      <circle cx="383.85" cy="261.7" r="19.83" stroke-width="0"/>
+    </g>
+    <g>
+      <circle cx="288.67" cy="153.85" r="33.29" fill="#fff" stroke-width="0"/>
+      <circle cx="288.67" cy="153.85" r="19.83" stroke-width="0"/>
+    </g>
+    <g>
+      <circle cx="163.88" cy="153.85" r="33.29" fill="#fff" stroke-width="0"/>
+      <circle cx="163.88" cy="153.85" r="19.83" stroke-width="0"/>
+    </g>
+  </g>
+</svg>

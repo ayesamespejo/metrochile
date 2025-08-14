@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Ruta_Expresa_Altocontraste" data-name="Ruta Expresa Altocontraste" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 622 622.08">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-1, .cls-2 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: #231f20;
+      }
+    </style>
+  </defs>
+  <g id="Ruta_Verde" data-name="Ruta Verde">
+    <g id="Circulo_externo" data-name="Circulo externo">
+      <path class="cls-1" d="m311.11,582.08c-149.49,0-271.11-121.59-271.11-271.04S161.62,40,311.11,40s270.89,121.59,270.89,271.04-121.52,271.04-270.89,271.04Z"/>
+      <path class="cls-2" d="m311.11,60c138.34,0,250.89,112.62,250.89,251.04s-112.55,251.04-250.89,251.04S60,449.46,60,311.04,172.65,60,311.11,60m0-40C150.61,20,20,150.55,20,311.04s130.61,291.04,291.11,291.04,290.89-130.55,290.89-291.04S471.5,20,311.11,20h0Z"/>
+    </g>
+    <path class="cls-2" d="m251.85,487.01l-75.91-351.94h97.6l36.97,265.19h.99l36.97-265.19h97.6l-75.91,351.94h-118.3Z"/>
+  </g>
+</svg>
