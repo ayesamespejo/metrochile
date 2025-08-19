@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "metroapp.app"
-               BlueprintName = "metroapp"
-               ReferencedContainer = "container:metroapp.xcodeproj">
+               BuildableName = "Metro.app"
+               BlueprintName = "Metro"
+               ReferencedContainer = "container:Metro.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "metroappTests.xctest"
-               BlueprintName = "metroappTests"
-               ReferencedContainer = "container:metroapp.xcodeproj">
+               BuildableName = "MetroTests.xctest"
+               BlueprintName = "MetroTests"
+               ReferencedContainer = "container:Metro.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "metroapp.app"
-            BlueprintName = "metroapp"
-            ReferencedContainer = "container:metroapp.xcodeproj">
+            BuildableName = "Metro.app"
+            BlueprintName = "Metro"
+            ReferencedContainer = "container:Metro.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "metroapp.app"
-            BlueprintName = "metroapp"
-            ReferencedContainer = "container:metroapp.xcodeproj">
+            BuildableName = "Metro.app"
+            BlueprintName = "Metro"
+            ReferencedContainer = "container:Metro.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

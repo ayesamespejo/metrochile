@@ -14,7 +14,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'metroapp' do
+target 'Metro' do
   config = use_native_modules!
 
   use_react_native!(
@@ -24,7 +24,7 @@ target 'metroapp' do
     :fabric_enabled => false,
   )
 
-  target 'metroappTests' do
+  target 'MetroTests' do
     inherit! :complete
     # Pods for testing
   end
