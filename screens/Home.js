@@ -15,7 +15,7 @@ import {
 
 import Globals from '../Globals';
 import Estilos from '../Estilos';
-import Carousel, { Pagination } from 'react-native-new-snap-carousel';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import CargaBipHome from '../assets/svg/home/CargaBip-Home.svg';
 import RutaExpresHome from '../assets/svg/home/RutaExpresa-Home.svg';
 import PlanificadorDeViaje from '../assets/svg/home/PlanificadorDeViaje.svg';
@@ -38,6 +38,7 @@ import CerrarCirculo from '../assets/svg/estados_linea/ErrorBorde.svg';
 import CheckCirculo from '../assets/svg/estados_linea/BuenoBorde.svg';
 import ExclamasionCirculo from '../assets/svg/estados_linea/AlertaBorde.svg';
 import { useNavigation } from "@react-navigation/native";
+import CarouselHome from "./CarouselHome";
 
 const iconoEstado = (estado) => {
     switch (estado) {
@@ -56,7 +57,6 @@ const iconoEstado = (estado) => {
 
 const CuadroCarusel = ({ item, itemWidth, itemHeight, isLandScape }) => {
   const navigation = useNavigation();
-
 
   let dynamicStyle = isLandScape
     ? { width: itemWidth * 0.95, height: 100 }
@@ -125,7 +125,7 @@ const Home = (props) => {
     // Se genera una propiedad para vincularla al Texto del Buscador.
   })
 
-  
+  console.log('superData ', superData);
 
   useEffect(() => {
     initCarousel()
@@ -253,6 +253,7 @@ const Home = (props) => {
       </SafeAreaView>
     )
   }*/
+ console.log('superData ', superData);
  
 
   function getInputRangeFromIndexes(range, index, carouselProps) {
@@ -298,7 +299,9 @@ const Home = (props) => {
    * Seccion del Carousel
    */
   const carouselView = (
+    
     <View style={[styles.carrusel]}>
+      {}
       <Carousel
         ref={isCarousel}
         data={superData}
@@ -360,7 +363,8 @@ const Home = (props) => {
             Estado de la red
           </Text>
         </View>
-        {carouselView}
+        {/*carouselView*/}
+        {<CarouselHome data={superData}/>}
         <Text style={[Estilos.textoTitulo, { top: 20, left: 20, marginBottom: 20 }]}>Accesos directos</Text>
         <View style={[styles.container]}>
           <ScrollView>            
