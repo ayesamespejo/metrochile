@@ -28,6 +28,7 @@ const EstadoDeLaRed = (props) => {
   const isCarousel = React.useRef(null)
   const [lineaActual, setLineaActual] = useState(props?.route?.params?.lineaActualinicial ?? 'l1')
   const [lineaActualPosicion, setLineaActualPosicion] = useState(props?.route?.params?.lineaActualPosicionInicial ?? 0)
+  const [stateRed, setStateRed] = useState('');
 
   const [state, setState] = useState({
     ...calculateDimensions(window),
@@ -134,7 +135,9 @@ const EstadoDeLaRed = (props) => {
           d.push(item)
           sectionIndex++
         }
-        setState({ ...state, data: d })
+        setState({ ...state, data: d });
+        setStateRed(item.data);
+
       })
       .catch((error) => console.error(error))
       .finally(() => {})
@@ -142,7 +145,6 @@ const EstadoDeLaRed = (props) => {
 
   const { superData, loading, sliderHeight, sliderWidth, itemWidth, isLandScape } = state
   const carouselItemWidth = itemWidth
-
   if (loading) {
     return (
       <SafeAreaView style={{ flex: 1 }}>

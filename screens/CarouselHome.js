@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { ScrollView, View, StyleSheet, Dimensions, Pressable } from 'react-native';
+import { ScrollView, View, StyleSheet, Dimensions, Pressable, Text } from 'react-native';
 
 const ITEM_SIZE = 85;
-const ITEM_SPACING = 18;
+const ITEM_SPACING = 25;
 const REPEAT_COUNT = 10;
 const { width } = Dimensions.get('window');
 
@@ -18,6 +18,7 @@ import CerrarCirculo from '../assets/svg/estados_linea/ErrorBorde.svg';
 import CheckCirculo from '../assets/svg/estados_linea/BuenoBorde.svg';
 import ExclamasionCirculo from '../assets/svg/estados_linea/AlertaBorde.svg';
 import { useNavigation } from '@react-navigation/native';
+import Estilos from '../Estilos';
 
 const items = [
     { title: 'L1', line: <Linea1 width={ITEM_SIZE} height={ITEM_SIZE} /> },
@@ -30,10 +31,12 @@ const items = [
   ];
 
 const CarouselHome = (props) => {
+  const data = props.data || ''; 
   const navigation = useNavigation();
+  
   const scrollRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
-  const data = props.data || ''; // Usa los datos pasados como props o los ítems por defecto
+  
   const itemTotalWidth = ITEM_SIZE + ITEM_SPACING;
   const stadeRedSize = 32;
   const repeatedItems = Array.from({ length: REPEAT_COUNT }, () => data).flat();
@@ -49,7 +52,6 @@ const CarouselHome = (props) => {
 
   function getLine(title) {
     const numeroLinea = title.toUpperCase();
-    console.log('numeroLinea', numeroLinea);
     const itemSelected = items.find(item => item.title === numeroLinea);
     return itemSelected ? itemSelected.line : null;
   }
@@ -73,7 +75,7 @@ const CarouselHome = (props) => {
     if (x > totalContentWidth - threshold) {
       scrollRef.current?.scrollTo({ x: initialOffset, animated: false });
     }
-  };
+  }
 
   const iconoEstado = (estado) => {
       switch (estado) {
@@ -90,9 +92,17 @@ const CarouselHome = (props) => {
       }
     }
 
+
   return (
-    <View style={styles.container}>
-      <ScrollView
+    <View style={styles.container}>      
+      <Text>prueba  - {data.length}</Text>
+      {<View style={[styles.fondoTitulo]}>
+                <Text style={[Estilos.textoTitulo, { marginTop: 20, marginLeft: 20, marginBottom: 30 }]}>
+                  Estado de la red
+                </Text>
+      </View>}
+      { data.length > 0 && (
+     <ScrollView
         ref={scrollRef}
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -103,7 +113,8 @@ const CarouselHome = (props) => {
       >
         {repeatedItems.map((item, index) => (
           <View key={index} style={styles.item}>
-            <Pressable
+             <Text>prueba 3</Text>
+           <Pressable
                     onPress={() =>
                       navigation.push('Estado de la Red', {
                         lineaActualinicial: item.title,
@@ -112,33 +123,37 @@ const CarouselHome = (props) => {
                     }
                   >
             {getLine(item.title)} 
-            <View style={{ positin: 'absolute', marginStart: 77, marginTop: -85, marginLeft: -20}}>{iconoEstado(item.estado)}</View>
+            <View style={{ position: 'absolute', marginStart: 77, marginBottom: -20, left: -9}}>{iconoEstado(item.estado)}</View>
             </Pressable>
           </View>
         ))}
       </ScrollView>
+      )}
 
       {/* PAGINACIÓN */}
      <View style={styles.pagination}>
-  {data.map((_, index) => (
-    <View key={index} style={styles.dotWrapper}>
-      <View
+    {data.map((_, index) => (
+      <View key={index} style={styles.dotWrapper}>
+        <View
         style={[
           styles.dot,
           index === currentPage ? styles.activeDot : styles.inactiveDot,
         ]}
       />
     </View>
-  ))}
-</View>
-    </View>
+     ))}
+   </View>
+    </View>    
   );
 };
 
 const styles = StyleSheet.create({
+  fondoTitulo: {
+    backgroundColor: '#FFFFFF',
+  },
   container: {
-    paddingTop: 15,
-    paddingBottom: 5,
+    /*height: 170,*/
+    backgroundColor: '#FFFFFF',
   },
   scrollContent: {
     alignItems: 'center',
@@ -150,13 +165,15 @@ const styles = StyleSheet.create({
     marginHorizontal: ITEM_SPACING / 2,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#e9db18ff',
   },
   pagination: {
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center', 
-  marginTop: 20, 
   gap: 14,       
+  marginTop: 15,
+  marginBottom: 20,
 },
 
 dotWrapper: {
@@ -176,7 +193,7 @@ inactiveDot: {
   height: 6,
 },
 
-activeDot: {
+activeDot: { 
   backgroundColor: 'rgba(30, 30, 30, 0.86)',
   width: 10,
   height: 10,

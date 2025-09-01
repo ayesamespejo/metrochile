@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -10,92 +9,40 @@ import {
   ScrollView,
   Image,
   Pressable,
-  Linking
+  Linking,
 } from 'react-native'
-
-import Globals from '../Globals';
-import Estilos from '../Estilos';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
-import CargaBipHome from '../assets/svg/home/CargaBip-Home.svg';
-import RutaExpresHome from '../assets/svg/home/RutaExpresa-Home.svg';
-import PlanificadorDeViaje from '../assets/svg/home/PlanificadorDeViaje.svg';
-import PlanoDeLaRedHome from '../assets/svg/home/PlanoDeLaRed-Home.svg';
-import TarifasHome from '../assets/svg/home/Tarifas-Home.svg';
-import CulturaComunidadHome from '../assets/svg/home/CulturaComunidad-Home.svg';
-import MetroQR from '../assets/svg/pasaje_QR/MetroQR.svg';
-import ManoHome from '../assets/svg/home/Mano-Home.svg';
-import Linea1 from '../assets/svg/lineas/Linea1.svg';
-import Linea2 from '../assets/svg/lineas/Linea2.svg';
-import Linea3 from '../assets/svg/lineas/Linea3.svg';
-import Linea4 from '../assets/svg/lineas/Linea4.svg';
-import Linea4A from '../assets/svg/lineas/Linea4A.svg';
-import Linea5 from '../assets/svg/lineas/Linea5.svg';
-import Linea6 from '../assets/svg/lineas/Linea6.svg';
-import Linea7 from '../assets/svg/lineas/Linea7.svg';
-import Linea8 from '../assets/svg/lineas/Linea8.svg';
-import Linea9 from '../assets/svg/lineas/Linea9.svg';
-import CerrarCirculo from '../assets/svg/estados_linea/ErrorBorde.svg';
-import CheckCirculo from '../assets/svg/estados_linea/BuenoBorde.svg';
-import ExclamasionCirculo from '../assets/svg/estados_linea/AlertaBorde.svg';
-import { useNavigation } from "@react-navigation/native";
-import CarouselHome from "./CarouselHome";
-
-const iconoEstado = (estado) => {
-    switch (estado) {
-      case '0':
-        return <CheckCirculo width={40} height={40} fill={Globals.COLOR.L5} />
-      case '1':
-        return <CheckCirculo width={40} height={40} fill={Globals.COLOR.L5} />
-      case '2':
-        return <ExclamasionCirculo width={40} height={40} fill={Globals.COLOR.L2} />
-      case '3':
-        return <CerrarCirculo width={40} height={40} fill={Globals.COLOR.ROJO_METRO} />
-      case '4':
-        return <ExclamasionCirculo width={40} height={40} fill={Globals.COLOR.L2} />
-    }
-  }
-
-const CuadroCarusel = ({ item, itemWidth, itemHeight, isLandScape }) => {
-  const navigation = useNavigation();
-
-  let dynamicStyle = isLandScape
-    ? { width: itemWidth * 0.95, height: 100 }
-    : { width: itemWidth / 2, height: itemHeight / 2, marginLeft: 65 };
-  if (!item) return null;
-
-    const numeroLinea = item.title.toString().substring(1).toUpperCase();
-    const nombreEstilo = item.styleName.toUpperCase();
-
-    return (
-      <Pressable
-        onPress={() =>
-          navigation.push('Estado de la Red', {
-            lineaActualinicial: item.title,
-            lineaActualPosicionInicial: item.data[0].sectionIndex,
-          })
-        }
-      >
-        <View style={[dynamicStyle]} key={`linea_${Math.round(Math.random() * 1000)}`}>
-          {numeroLinea == '1' && <Linea1 width={104} height={104} />}
-          {numeroLinea == '2' && <Linea2 width={104} height={104} />}
-          {numeroLinea == '3' && <Linea3 width={104} height={104} />}
-          {numeroLinea == '4' && <Linea4 width={104} height={104} />}
-          {numeroLinea == '4A' && <Linea4A width={104} height={104} />}
-          {numeroLinea == '5' && <Linea5 width={104} height={104} />}
-          {numeroLinea == '6' && <Linea6 width={104} height={104} />}
-          {numeroLinea == '7' && <Linea7 width={104} height={104} />}
-          {numeroLinea == '8' && <Linea8 width={104} height={104} />}
-          {numeroLinea == '9' && <Linea9 width={104} height={104} />}
-          <View style={{ positin: 'absolute', marginStart: 77, marginTop: -105 }}>{iconoEstado(item.estado)}</View>
-        </View>
-      </Pressable>
-    )
-  }
-
+import React, { useState, useEffect, useContext } from 'react'
+import Globals from '../Globals'
+import Estilos from '../Estilos'
+import Carousel, { Pagination } from 'react-native-snap-carousel'
+import CargaBipHome from '../assets/svg/home/CargaBip-Home.svg'
+import RutaExpresHome from '../assets/svg/home/RutaExpresa-Home.svg'
+import PlanificadorDeViaje from '../assets/svg/home/PlanificadorDeViaje.svg'
+import PlanoDeLaRedHome from '../assets/svg/home/PlanoDeLaRed-Home.svg'
+import TarifasHome from '../assets/svg/home/Tarifas-Home.svg'
+import CulturaComunidadHome from '../assets/svg/home/CulturaComunidad-Home.svg'
+import MetroQR from '../assets/svg/pasaje_QR/MetroQR.svg'
+import ManoHome from '../assets/svg/home/Mano-Home.svg'
+import Linea1 from '../assets/svg/lineas/Linea1.svg'
+import Linea2 from '../assets/svg/lineas/Linea2.svg'
+import Linea3 from '../assets/svg/lineas/Linea3.svg'
+import Linea4 from '../assets/svg/lineas/Linea4.svg'
+import Linea4A from '../assets/svg/lineas/Linea4A.svg'
+import Linea5 from '../assets/svg/lineas/Linea5.svg'
+import Linea6 from '../assets/svg/lineas/Linea6.svg'
+import Linea7 from '../assets/svg/lineas/Linea7.svg'
+import Linea8 from '../assets/svg/lineas/Linea8.svg'
+import Linea9 from '../assets/svg/lineas/Linea9.svg'
+import CerrarCirculo from '../assets/svg/estados_linea/ErrorBorde.svg'
+import CheckCirculo from '../assets/svg/estados_linea/BuenoBorde.svg'
+import ExclamasionCirculo from '../assets/svg/estados_linea/AlertaBorde.svg'
+import WhatsappIcon from '../assets/svg/home/whatsapp.svg'
 
 const Home = (props) => {
-     /** Estructura dinamica para determinar el tamaño */
-  const window = Dimensions.get('window');
+  /** Estructura dinamica para determinar el tamaño */
+  const window = Dimensions.get('window')
+  const metroQR = require('../assets/svg/pasaje_QR/MetroQR.png');
+
 
   const calculateDimensions = ({ height, width }) => ({
     sliderWidth: width,
@@ -103,14 +50,14 @@ const Home = (props) => {
     itemWidth: Math.round(width / 3.8),
     itemHeight: Math.round((Math.round(width / 3.8) * 3) / 3),
     isLandScape: width < height,
-  });
+  })
 
   const [carousel, setCarousel] = useState(null)
   const [botonSeleccionado, setBotonSeleccionado] = useState('all')
   const [index, setIndex] = React.useState(0)
   const isCarousel = React.useRef(null)
-  const [lineaActual, setLineaActual] = useState('l1')
-  const [mostrarCarousel, setMostrarCarousel] = useState(false);
+  const [lineaActual, setLineaActual] = useState('l1');
+  const [stateRed, setStateRed] = useState([]);
   const [state, setState] = useState({
     ...calculateDimensions(window),
     dimensions: {
@@ -124,8 +71,6 @@ const Home = (props) => {
     urlRutaExpresa: `${Globals.MAIN_URL}/api/estadoRedDetalle.php`,
     // Se genera una propiedad para vincularla al Texto del Buscador.
   })
-
-  console.log('superData ', superData);
 
   useEffect(() => {
     initCarousel()
@@ -151,39 +96,15 @@ const Home = (props) => {
     initLineasFiltradasParaCombinaciones()
   })
 
-    const [posts, setPosts] = useState([]);
-    const fetchPosts = async () => {
-  try {
-    const response = await fetch('https://www.metro.cl/api/estadoRedDetalle.php');
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const data = await response.json();
-    const test = data ? data?.l1?.estaciones[0] : '';
-    setPosts(test);
-  
-    return data;
-  } catch (error) {
-    console.error('Error fetching posts:', error);
-    return null;
-  }
-};
-
-
-
-   useEffect(() => {
-    fetchPosts();
-  }, []);
-
   const initLineasFiltradasParaCombinaciones = () => {
     const { data, superData, loading } = state
     if (data.length != 0 && superData.length == 0 && loading) {
-      let lineasFiltradas = data
+      let lineasFiltradas = data;
       setState({ ...state, loading: false, superData: lineasFiltradas })
     }
   }
 
-   const initCarousel = () => {
+  const initCarousel = () => {
     if (state.opacity == 0 && state.loading == false) {
       carousel?.snapToItem(1)
       setState({ ...state, opacity: 1 })
@@ -232,19 +153,35 @@ const Home = (props) => {
           d.push(item)
           sectionIndex++
         }
-        setState({ ...state, data: d })
+        setState({ ...state, data: d });
+        
+        setStateRed(d);
       })
       .catch((error) => console.error(error))
       .finally(() => {})
   }
 
+  const iconoEstado = (estado) => {
+    switch (estado) {
+      case '0':
+        return <CheckCirculo width={40} height={40} fill={Globals.COLOR.L5} />
+      case '1':
+        return <CheckCirculo width={40} height={40} fill={Globals.COLOR.L5} />
+      case '2':
+        return <ExclamasionCirculo width={40} height={40} fill={Globals.COLOR.L2} />
+      case '3':
+        return <CerrarCirculo width={40} height={40} fill={Globals.COLOR.ROJO_METRO} />
+      case '4':
+        return <ExclamasionCirculo width={40} height={40} fill={Globals.COLOR.L2} />
+    }
+  }
 
-   
+  const { superData, loading, sliderHeight, sliderWidth, itemWidth, isLandScape } = state
+  const carouselItemWidth = itemWidth
 
-  const { superData, loading, sliderHeight, sliderWidth, itemHeight, itemWidth, isLandScape } = state;
-  const carouselItemWidth = itemWidth;
+  // props.navigation.setOptions({ title: 'Bienvenid@JJ' })
 
-  /*if (!loading) {
+  if (!stateRed) {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ marginTop: sliderHeight / 2.5 }}>
@@ -252,9 +189,58 @@ const Home = (props) => {
         </View>
       </SafeAreaView>
     )
-  }*/
- console.log('superData ', superData);
- 
+  }
+
+  const CuadroCarusel = ({ item }) => {
+    const { itemWidth, itemHeight, isLandScape } = state
+    let dynamicStyle = isLandScape
+      ? {
+          width: itemWidth * 0.95,
+          height: 100,
+        }
+      : {
+          width: itemWidth / 2,
+          height: itemHeight / 2,
+          marginLeft: 65,
+        }
+
+    if (!item) {
+      return <></>
+    }
+    const numeroLinea = item.title.toString().substring(1).toUpperCase()
+    //const nombreEstilo = item.styleName.toUpperCase()
+    // const estadoicono = [
+    //   require('../assets/estados/ok.png'),
+    //   require('../assets/estados/ok.png'),
+    //   require('../assets/estados/alerta.png'),
+    //   require('../assets/estados/error.png'),
+    //   require('../assets/estados/alerta.png'),
+    // ]
+    return (
+      <Pressable
+        onPress={() =>
+          props.navigation.push('Estado de la Red', {
+            lineaActualinicial: item.title,
+            lineaActualPosicionInicial: item.data[0].sectionIndex,
+          })
+        }
+      >
+        <View style={[dynamicStyle]} key={`linea_${Math.round(Math.random() * 1000)}`}>
+          {numeroLinea == '1' && <Linea1 width={104} height={104} />}
+          {numeroLinea == '2' && <Linea2 width={104} height={104} />}
+          {numeroLinea == '3' && <Linea3 width={104} height={104} />}
+          {numeroLinea == '4' && <Linea4 width={104} height={104} />}
+          {numeroLinea == '4A' && <Linea4A width={104} height={104} />}
+          {numeroLinea == '5' && <Linea5 width={104} height={104} />}
+          {numeroLinea == '6' && <Linea6 width={104} height={104} />}
+          {numeroLinea == '7' && <Linea7 width={104} height={104} />}
+          {numeroLinea == '8' && <Linea8 width={104} height={104} />}
+          {numeroLinea == '9' && <Linea9 width={104} height={104} />}
+          <View style={{ positin: 'absolute', marginStart: 77, marginTop: -105 }}>{iconoEstado(item.estado)}</View>
+        </View>
+      </Pressable>
+    )
+  }
 
   function getInputRangeFromIndexes(range, index, carouselProps) {
     const sizeRef = carouselProps.vertical ? carouselProps.itemHeight : carouselProps.itemWidth
@@ -291,28 +277,19 @@ const Home = (props) => {
   }
 
   const navigationThroughMenu = (title) => {
-    console.log('Navigating to:', title.replace('_', ''));
     props.navigation.push(title, { screen: title.replace('_', '') })
   }
+
 
   /**
    * Seccion del Carousel
    */
-  const carouselView = (
-    
+  const carouselView = (    
     <View style={[styles.carrusel]}>
-      {}
       <Carousel
         ref={isCarousel}
-        data={superData}
-        renderItem={({ item }) => (
-    <CuadroCarusel
-      item={item}
-      itemWidth={itemWidth}
-      itemHeight={itemHeight}
-      isLandScape={isLandScape}
-    />
-  )}
+        data={stateRed}
+        renderItem={CuadroCarusel}
         sliderWidth={sliderWidth}
         itemWidth={carouselItemWidth}
         firstItem={index}
@@ -322,7 +299,7 @@ const Home = (props) => {
           setBotonSeleccionado('all')
           setState({ ...state, index: indexPaso })
           setIndex(indexPaso)
-          setLineaActual(superData[indexPaso].title)
+          setLineaActual(stateRed[indexPaso].title)
         }}
         crollInterpolator={scrollInterpolator2}
         slideInterpolatedStyle={animatedStyles2}
@@ -331,7 +308,7 @@ const Home = (props) => {
       />
       {/** Estos son los botonsitos de la paginacion */}
       <Pagination
-        dotsLength={superData.length}
+        dotsLength={stateRed.length}
         activeDotIndex={index}
         carouselRef={isCarousel}
         containerStyle={styles.paginationContainer}
@@ -349,9 +326,6 @@ const Home = (props) => {
     </View>
   )
 
-
-  
-
   /**
    * Formato LandScape - Vertical para el Telefono que inicializa con un SafeAreaView
    */
@@ -363,12 +337,11 @@ const Home = (props) => {
             Estado de la red
           </Text>
         </View>
-        {/*carouselView*/}
-        {<CarouselHome data={superData}/>}
+        {carouselView}
         <Text style={[Estilos.textoTitulo, { top: 20, left: 20, marginBottom: 20 }]}>Accesos directos</Text>
         <View style={[styles.container]}>
-          <ScrollView>            
-            <View style={[styles.fila]}>              
+          <ScrollView>
+            <View style={[styles.fila]}>
               <Pressable onPress={() => navigationThroughMenu('Ruta Expresa')}>
                 <View style={styles.cardContainerOpcion}>
                   <RutaExpresHome fill={Globals.COLOR.ROJO_METRO} style={styles.imagenSVGMayor} />
@@ -389,7 +362,6 @@ const Home = (props) => {
                   <Text style={[Estilos.textoGeneral, styles.opcion, { lineHeight: 18 }]}>Plano{'\n'}de red</Text>
                 </View>
               </Pressable>
-
             </View>
             <View style={[styles.fila]}>
               <Pressable onPress={() => navigationThroughMenu('Tarifas')}>
@@ -403,26 +375,20 @@ const Home = (props) => {
                   <CargaBipHome fill={Globals.COLOR.ROJO_METRO} style={styles.imagenSVGMayor} />
                   <Text style={[Estilos.textoGeneral, styles.opcion, { lineHeight: 18 }]}>Consulta y carga bip!</Text>
                 </View>
-              </Pressable>            
+              </Pressable>
              <Pressable
                 onPress={() => {
                   if (Platform.OS == 'ios') {
-                    console.log('Intentando abrir App desde IOS...')
                     Linking.canOpenURL('metromuv://').then((posible) => {
-                      console.log('Verificando: ', posible)
                       if (posible) {
-                        console.log('Abriendo App..')
                         Linking.openURL('metromuv://')
                       } else {
                         Linking.openURL('https://apps.apple.com/us/app/metroqr/id6501962024')
                       }
                     })
                   } else {
-                    console.log('Intentando abrir App desde Android...')
                     Linking.canOpenURL('metromuv://').then((posible) => {
-                      console.log('Verificando: ', posible)
                       if (posible) {
-                        console.log('Abriendo App..')
                         Linking.openURL('metromuv://')
                       } else {
                         Linking.openURL('https://play.google.com/store/apps/details?id=cl.metromuv.app')
@@ -431,14 +397,22 @@ const Home = (props) => {
                   }
                 }}
               >
-                <View style={[styles.cardContainerOpcion, { alignItems: 'center', justifyContent: 'center' }]}>
-                  <MetroQR fill={Globals.COLOR.ROJO_METRO} style={[styles.imagenSVGMayor, { width: 50, height: 50 }]} />
+                <View style={[styles.cardContainerOpcion, { alignItems: 'center', justifyContent: 'center', backgroundColor: '#ff0051' }]}>
+                  {/*<MetroQR style={styles.imagenQR} />*/}
+                  <Image source={metroQR} style={styles.imagenQR}></Image>
                 </View>
               </Pressable>
-              
+              {/* { Platform.OS == 'ios' && 
+                              <Pressable onPress={() => navigationThroughMenu('Cultura y Comunidad')}>
+                              <View style={styles.cardContainerOpcion}>
+                                <CulturaComunidadHome fill={Globals.COLOR.ROJO_METRO} style={styles.imagenSVG} />
+                                <Text style={[Estilos.textoGeneral, styles.opcion, { lineHeight: 18 }]}>Cultura y comunidad</Text>
+                              </View>
+                            </Pressable>
+              } */}
             </View>
-            <View style={[styles.fila]}>  
-                       
+            <View style={[styles.fila]}>
+              {/* {Platform.OS == 'android' && <Pressable onPress={() => navigationThroughMenu('Cultura y Comunidad')}> */}
               <Pressable onPress={() => navigationThroughMenu('Cultura y Comunidad')}>
                 <View style={styles.cardContainerOpcion}>
                   <CulturaComunidadHome fill={Globals.COLOR.ROJO_METRO} style={styles.imagenSVG} />
@@ -450,25 +424,46 @@ const Home = (props) => {
                   <ManoHome fill="#FFFFFF" style={styles.imagenSVG} />
                   <Text style={[Estilos.textoBotonLlamadaTelefono, styles.opcionLlamar]}>1488</Text>
                 </View>
-              </Pressable>              
-            </View>            
+              </Pressable>
+              {/* <Pressable onPress={() => Linking.openURL(`https://w.app/MetroChat2`)}>
+                <View style={styles.cardContainerOpcion}>
+                  <WhatsappIcon style={styles.imagenSVGMayor}></WhatsappIcon>
+                  <Text style={[Estilos.textoGeneral, styles.opcion, { lineHeight: 16 }]}>Consultas Frecuentes</Text>
+                </View>
+              </Pressable> */}
+            </View>
+            {/* <View style={[styles.fila]}>
+              <Pressable onPress={() => navigationThroughMenu('Planificadores')}>
+                <View style={styles.cardContainerOpcion}>
+                  <PlanificadorDeViaje fill={Globals.COLOR.ROJO_METRO} style={styles.imagenSVG} />
+                  <Text style={[Estilos.textoGeneral, styles.opcion, { lineHeight: 18 }]}>Planificador de viajes</Text>
+                </View>
+              </Pressable>
+            </View> */}
           </ScrollView>
         </View>
       </View>
     )
   }
+  /**
+   * Formato Portrait - Horizontal para el Telefono que inicializa con un ScrollView
+   */
+  return (
+    <ScrollView style={{ flex: 1 }} nestedScrollEnabled>
+      {carouselView}
+    </ScrollView>
+  )
 }
 
-
-export default Home;
+export default Home
 
 /**
  * Dimensiones de la pantalla
  */
-const SLIDER_HEIGHT = Dimensions.get('window').height;
-const SLIDER_WIDTH = Dimensions.get('window').width;
-const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.9);
-const ITEM_HEIGHT = Math.round(ITEM_WIDTH * 0.75);
+const SLIDER_HEIGHT = Dimensions.get('window').height
+const SLIDER_WIDTH = Dimensions.get('window').width
+const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.9)
+const ITEM_HEIGHT = Math.round(ITEM_WIDTH * 0.75)
 
 let styles = StyleSheet.create({
   fondoTitulo: {
@@ -552,6 +547,10 @@ let styles = StyleSheet.create({
     marginRight: 'auto',
     marginTop: 5,
     marginBottom: 10,
+  },
+  imagenQR:{
+    width: 95,
+    height: 70,    
   },
   opcion: {
     // fontFamily: 'Helvetica-Bold',
