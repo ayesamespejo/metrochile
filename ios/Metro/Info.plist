@@ -68,5 +68,11 @@
     <array>
        <string>MaterialCommunityIcons.ttf</string>
     </array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Esta aplicación necesita acceso a tu fototeca para que puedas seleccionar imágenes desde tu galería.</string>
+	<key>NSCameraUsageDescription</key>
+    <string>Esta aplicación necesita acceder a la cámara para tomar fotos.</string>
+	<key>NSCameraUsageDescription</key>
+    <string>Esta aplicación necesita acceder a la cámara para tomar fotos.</string>
 </dict>
 </plist>
