@@ -139,7 +139,7 @@ const SurveyPopup = ({ visible, onClose }) => {
               ))}
             </View>
             <Text style={styles.commentLabel}>
-              Déjanos tus comentarios o ¿Qué Recomendarías para nuestra app?
+               ¿Qué mejorarías de nuestra App?
             </Text>
             <TextInput
               style={styles.textInput}
