@@ -36,6 +36,7 @@ import Linea9 from '../assets/svg/lineas/Linea9.svg'
 import CerrarCirculo from '../assets/svg/estados_linea/ErrorBorde.svg'
 import CheckCirculo from '../assets/svg/estados_linea/BuenoBorde.svg'
 import ExclamasionCirculo from '../assets/svg/estados_linea/AlertaBorde.svg'
+import DanosTuOpinion from '../assets/svg/home/Danos-TuOpinion.svg'
 import WhatsappIcon from '../assets/svg/home/whatsapp.svg'
 
 const Home = (props) => {
@@ -423,6 +424,12 @@ const Home = (props) => {
                 <View style={styles.cardContainerOpcion1488}>
                   <ManoHome fill="#FFFFFF" style={styles.imagenSVG} />
                   <Text style={[Estilos.textoBotonLlamadaTelefono, styles.opcionLlamar]}>1488</Text>
+                </View>
+              </Pressable>
+              <Pressable onPress={() =>  navigationThroughMenu('Danos Tu Opinión')}>
+                <View style={styles.cardContainerOpcion}>
+                  <DanosTuOpinion  style={[{marginTop: 21, marginBottom: 18, alignItems: 'center', }]} />
+                  <Text style={[Estilos.textoGeneral, styles.opcion, { lineHeight: 20 }]}>Danos tu Opinión</Text>
                 </View>
               </Pressable>
               {/* <Pressable onPress={() => Linking.openURL(`https://w.app/MetroChat2`)}>

@@ -90,6 +90,9 @@ import ConfigNotificaciones from './assets/svg/notificaciones/configNotificacion
 import Globals, { KEY_CONFIG_NOTIFICACIONES } from './Globals'
 import IntermodalidadScreen from './screens/IntermodalidadScreen'
 import SurveyPopup from './components/SurveyPopup';
+import DanosTuOpinion from './screens/DanosTuOpinion'
+import IncidentForm from './src/components/IncidentForm'
+
 const PushNotification = require('react-native-push-notification');
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -564,6 +567,7 @@ const HomeView = () => {
       <Stack.Screen name="CargaBipJJ" component={CargaBip} options={getOptions5('Carga bip!')} />
       <Stack.Screen name="Tarifas" component={Tarifas} options={getOptions4()} />
       <Stack.Screen name="Cultura y Comunidad" component={CulturaYComunidadView} options={getOptions4()} />
+      <Stack.Screen name="Danos Tu Opinión" component={DanosTuOpinion} />
       <Drawer.Screen name="Agenda" component={Agenda} options={getOptions4()} />
       <Drawer.Screen name="AgendaDetalle" component={AgendaDetalle} options={getOptions4()} />
       <Drawer.Screen name="MetroInforma_" component={MetroInforma} options={getOptions4()} />
@@ -696,7 +700,7 @@ const TarifasView = () => {
 const ConsultasView = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Sugerencias y Reclamos" component={Consultas} options={getOptions()} />
+      <Stack.Screen name="Sugerencias y Reclamos" component={IncidentForm} options={getOptions()} />
       <Stack.Screen name="Selecciona tu Estación" component={InformacionEstaciones} options={getOptions3()} />
     </Stack.Navigator>
   )
