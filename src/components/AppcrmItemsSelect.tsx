@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {useAppcrmItems} from '../hooks/useAppcrmItems';
 import Svg, {Path} from 'react-native-svg';
-import { AppcrmItem } from '../models/appcrm-item.model';
+import {AppcrmItem} from '../models/appcrm-item.model';
 
 interface Props {
   name: string;
@@ -67,13 +67,12 @@ const AppcrmItemsAutocomplete: React.FC<Props> = ({
 
   const itemsSelect = useMemo(() => {
     if (tipo === 'clasificacion') {
-      return items.filter(
-        (item: AppcrmItem) => item.id !== 3,
-      );
+      return items.filter((item: AppcrmItem) => item.id !== 3);
     }
     if (tipo === 'tipo') {
       return items.filter(
-        (item: AppcrmItem) => item.idClasificacion === Number(formData?.clasificacion),
+        (item: AppcrmItem) =>
+          item.idClasificacion === Number(formData?.clasificacion),
       );
     }
     if (tipo === 'subtipo') {
@@ -217,8 +216,8 @@ const AppcrmItemsAutocomplete: React.FC<Props> = ({
             </View>
 
             <FlatList
-              data={[...filteredItems].sort(
-                (a, b) => a.description.localeCompare(b.description),
+              data={[...filteredItems].sort((a, b) =>
+                a.description.localeCompare(b.description),
               )}
               keyExtractor={item => item.id.toString()}
               keyboardShouldPersistTaps="handled"

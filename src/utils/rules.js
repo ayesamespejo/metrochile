@@ -450,9 +450,9 @@ export const RULES = {
     equipoGestionador: '',
   },
   '05-26': { //Sugerencias - Instalaciones
-    hidden: ['nCarroTren','direccion','comuna','nDeTarjeta','datosTicket','monto','nMaquinaVendedor','subtipo'],
+    hidden: ['nCarroTren','fechaIncidente','horaIncidente','direccion','comuna','nDeTarjeta','datosTicket','monto','nMaquinaVendedor','subtipo'],
     required: ['linea','estacion'],
-    optional: ['medioDePago','fechaIncidente','horaIncidente'],
+    optional: ['medioDePago'],
     equipoGestionador: '',
   },
   '05-27': { //Sugerencias - Señalética
@@ -468,9 +468,9 @@ export const RULES = {
     equipoGestionador: '',
   },
   '05-29': { //Sugerencias - Nuevas líneas
-    hidden: ['estacion','nCarroTren','direccion','comuna','horaIncidente','nDeTarjeta','datosTicket','monto','nMaquinaVendedor','subtipo'],
+    hidden: ['estacion','nCarroTren','fechaIncidente','direccion','comuna','horaIncidente','nDeTarjeta','datosTicket','monto','nMaquinaVendedor','subtipo'],
     required: ['linea'],
-    optional: ['medioDePago','fechaIncidente'],
+    optional: ['medioDePago'],
     equipoGestionador: '',
   },
   '05-30': { //Sugerencias - Otros (Validar Dinamo)
