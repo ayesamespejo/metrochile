@@ -365,10 +365,10 @@ const Home = (props) => {
               </Pressable>
             </View>
             <View style={[styles.fila]}>
-              <Pressable onPress={() => navigationThroughMenu('Tarifas')}>
+              <Pressable onPress={() => navigationThroughMenu('Tarifas y Horarios')}>
                 <View style={styles.cardContainerOpcion}>
                   <TarifasHome fill={Globals.COLOR.ROJO_METRO} style={styles.imagenSVG} />
-                  <Text style={[Estilos.textoGeneral, styles.opcion, { lineHeight: 18 }]}>Tarifas</Text>
+                  <Text style={[Estilos.textoGeneral, styles.opcion, { lineHeight: 18 }]}>Tarifas y Horarios</Text>
                 </View>
               </Pressable>
               <Pressable onPress={() => navigationThroughMenu('Consulta bip!_')}>
@@ -423,7 +423,7 @@ const Home = (props) => {
               <Pressable onPress={() => Linking.openURL(`tel:1488`)}>
                 <View style={styles.cardContainerOpcion1488}>
                   <ManoHome fill="#FFFFFF" style={styles.imagenSVG} />
-                  <Text style={[Estilos.textoBotonLlamadaTelefono, styles.opcionLlamar]}>1488</Text>
+                  <Text style={[Estilos.textoBotonLlamadaTelefono, styles.opcionLlamar]}>Llamar 1488</Text>
                 </View>
               </Pressable>
               <Pressable onPress={() =>  navigationThroughMenu('Danos Tu Opinión')}>

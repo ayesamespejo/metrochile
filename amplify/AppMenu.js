@@ -162,25 +162,25 @@ const contentMenu = [
         subSections: [
             {
                 id: 'menuOpcion5.1',
-                title: 'Emergencias - 1411',
+                title: 'Emergencias - Llamar 1411',
                 isLinking: 1411,
                 isNewOption: false
             },
             {
                 id: 'menuOpcion5.2',
-                title: 'Acoso - 1488',
+                title: 'Acoso - Llamar 1488',
                 isLinking: 1488,
                 isNewOption: false
             },
             {
                 id: 'menuOpcion5.3',
-                title: 'Consultas - 600 600 9292',
+                title: 'Consultas - Llamar 600 600 9292',
                 isLinking: '600 600 9292',
                 isNewOption: false
             },
             {
                 id: 'menuOpcion5.4',
-                title: 'Asistencia - 800 540 800',
+                title: 'Asistencia - Llamar 800 540 800',
                 isLinking: '800 540 800',
                 isNewOption: false
             },
@@ -203,7 +203,7 @@ const contentMenu = [
     },
     {
         id: 'menuOpcion6',
-        title: '1488',
+        title: 'Llamar 1488',
         visible: 0,
         actionAvailable: 0,
         isLinking: 1488,

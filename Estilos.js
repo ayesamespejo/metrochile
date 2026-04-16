@@ -496,7 +496,7 @@ export default StyleSheet.create({
         fontFamily: 'Helvetica-Bold',
       },
     }),
-    fontSize: 24,
+    fontSize: 21,
   },
   textoEtiqueta: {
     ...Platform.select({

@@ -565,7 +565,7 @@ const HomeView = () => {
       <Stack.Screen name="VoucherDigital" component={VoucherDigital} options={getOptions5('Comprobante de Carga')} />
       <Stack.Screen name="CargaBip" component={CargaBipView} options={getOptions5('Carga bip!')} />
       <Stack.Screen name="CargaBipJJ" component={CargaBip} options={getOptions5('Carga bip!')} />
-      <Stack.Screen name="Tarifas" component={Tarifas} options={getOptions4()} />
+      <Stack.Screen name="Tarifas y Horarios" component={Tarifas} options={getOptions4()} />
       <Stack.Screen name="Cultura y Comunidad" component={CulturaYComunidadView} options={getOptions4()} />
       <Stack.Screen name="Danos Tu Opinión" component={DanosTuOpinion} />
       <Drawer.Screen name="Agenda" component={Agenda} options={getOptions4()} />
@@ -692,7 +692,7 @@ const EstadoDeLaRedView = () => {
 const TarifasView = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Tarifas" component={Tarifas} options={getOptions()} />
+      <Stack.Screen name="Tarifas y Horarios" component={Tarifas} options={getOptions()} />
     </Stack.Navigator>
   )
 }
@@ -700,7 +700,7 @@ const TarifasView = () => {
 const ConsultasView = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Sugerencias y Reclamos" component={IncidentForm} options={getOptions()} />
+      <Stack.Screen name="Sugerencias y Reclamos" component={Consultas} options={getOptions()} />
       <Stack.Screen name="Selecciona tu Estación" component={InformacionEstaciones} options={getOptions3()} />
     </Stack.Navigator>
   )
