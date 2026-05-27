@@ -13,7 +13,7 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios'
 import PushNotification from 'react-native-push-notification'
 import Globals from './Globals'
 import { PlaybackService } from './js/services/PlaybackService'
-
+//import firebase from '@react-native-firebase/app';
 
 
 let getData = async (key) => {
@@ -95,6 +95,7 @@ PushNotification.configure({
       checkApplicationPermission()
     }
     console.log('TOKEN:', token.token)
+     //console.log('firebase ___________________________________',firebase.app().name);
     // Alert.alert('Se enviará token por instalación TOKEN: ',token.token)
     // Se almacena el token para ser utilizado en la configuración
     // console.log('Almacenando token para config: ', token.token)

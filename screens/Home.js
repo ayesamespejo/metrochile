@@ -38,6 +38,7 @@ import CheckCirculo from '../assets/svg/estados_linea/BuenoBorde.svg'
 import ExclamasionCirculo from '../assets/svg/estados_linea/AlertaBorde.svg'
 import DanosTuOpinion from '../assets/svg/home/Danos-TuOpinion.svg'
 import WhatsappIcon from '../assets/svg/home/whatsapp.svg'
+//import firebase from '@react-native-firebase/app';
 
 const Home = (props) => {
   /** Estructura dinamica para determinar el tamaño */
@@ -73,6 +74,7 @@ const Home = (props) => {
     // Se genera una propiedad para vincularla al Texto del Buscador.
   })
 
+  //console.log('firebase ',firebase.app().name);
   useEffect(() => {
     initCarousel()
     // const _refrescoLineas = setInterval(() => {
