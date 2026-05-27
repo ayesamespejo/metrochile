@@ -92,6 +92,8 @@ import IntermodalidadScreen from './screens/IntermodalidadScreen'
 import SurveyPopup from './components/SurveyPopup';
 import DanosTuOpinion from './screens/DanosTuOpinion'
 import IncidentForm from './src/components/IncidentForm'
+import messaging from '@react-native-firebase/messaging';
+
 
 const PushNotification = require('react-native-push-notification');
 
