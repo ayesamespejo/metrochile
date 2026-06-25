@@ -92,10 +92,35 @@ import IntermodalidadScreen from './screens/IntermodalidadScreen'
 import SurveyPopup from './components/SurveyPopup';
 import DanosTuOpinion from './screens/DanosTuOpinion'
 import IncidentForm from './src/components/IncidentForm'
-import messaging from '@react-native-firebase/messaging';
 
+import {setupFcm} from './src/notifications/fcmSetup';
+import messaging, {
+  onMessage,
+  onNotificationOpenedApp,
+  getInitialNotification,
+} from '@react-native-firebase/messaging';
+import {logFcmManualPayload} from './src/notifications/fcmMessageUtils';
+import {
+  navigateToNotifications,
+  flushPendingNotificationNavigation,
+} from './src/notifications/fcmNavigation';
 
 const PushNotification = require('react-native-push-notification');
+
+async function testFCM() {
+  try {
+    await messaging().registerDeviceForRemoteMessages();
+
+    const apnsToken = await messaging().getAPNSToken();
+    console.log('APNS TOKEN:', apnsToken);
+
+    const fcmToken = await messaging().getToken();
+    console.log('FCM TOKEN:', fcmToken);
+  } catch (e) {
+    console.log('ERROR:', e);
+  }
+}
+
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -884,8 +909,31 @@ export const renderMenuDrawerContent = (
 
 function App() {
   const [showSurvey, setShowSurvey] = useState(false);
+console.log('-----------------------------testttt');
 
+useEffect(() => {
+  messaging().onNotificationOpenedApp(remoteMessage => {
+    console.log('OPENED', remoteMessage);
+  });
 
+  messaging()
+    .getInitialNotification()
+    .then(remoteMessage => {
+      console.log('INITIAL', remoteMessage);
+    });
+}, []);
+
+useEffect(() => {
+  console.log('1');
+
+  const unsubscribe = messaging().onMessage(async remoteMessage => {
+    console.log('2', remoteMessage);
+  });
+
+  console.log('3');
+
+  return unsubscribe;
+}, []);
 
   const handleAppStateChange = (nextAppState) => {
     if (nextAppState == 'background') {
@@ -928,10 +976,54 @@ function App() {
   }
 
   const setNavigation = (childNavigation) => {
-    App.navigation = childNavigation
+    App.navigation = childNavigation;
+    flushPendingNotificationNavigation();
   }
 
+  
+const status =  messaging().requestPermission();
+
+console.log('Status:', status);
+
+const isRegistered = messaging().isDeviceRegisteredForRemoteMessages;
+   console.log('isRegistered ',isRegistered);
+
   useEffect(() => {
+
+     setupFcm({isBetaUser: false}).catch(error => {
+      console.warn('[FCM] Error en setupFcm:', error);
+    });
+
+    let unsubscribeOnMessage = () => {};
+    let unsubscribeNotificationOpened = () => {};
+
+    if (Platform.OS === 'android') {
+      unsubscribeOnMessage = messaging().onMessage(async remoteMessage => {
+        logFcmManualPayload(remoteMessage, 'FOREGROUND');
+      });
+
+      unsubscribeNotificationOpened = messaging().onNotificationOpenedApp(
+        remoteMessage => {
+          logFcmManualPayload(remoteMessage, 'OPENED_FROM_BACKGROUND');
+          navigateToNotifications();
+        },
+      );
+
+      messaging()
+        .getInitialNotification()
+        .then(remoteMessage => {
+          if (remoteMessage) {
+            logFcmManualPayload(remoteMessage, 'COLD_START');
+            navigateToNotifications();
+          }
+        })
+        .catch(error => {
+          console.warn('[FCM] Error en getInitialNotification:', error);
+        });
+    }
+    testFCM();
+    
+
     console.log('============================== USEEFFECT APP ========================')
     // const _intervalo = setInterval(() => {
     //   const ahora = new Date()
@@ -1099,7 +1191,18 @@ function App() {
       })
 
    // PushNotification.cancelAllLocalNotifications()
-    AppState.addEventListener('change', handleAppStateChange)
+    //AppState.addEventListener('change', handleAppStateChange)
+
+    const appStateSubscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange,
+    );
+
+    return () => {
+      unsubscribeOnMessage();
+      unsubscribeNotificationOpened();
+      appStateSubscription.remove();
+    };
   }, [])
   
   return (

@@ -12,6 +12,8 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		82C4F9142FE9D3F9003C4C2D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 82C4F9132FE9D3F9003C4C2D /* GoogleService-Info.plist */; };
+		82C4F9152FE9D3F9003C4C2D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 82C4F9132FE9D3F9003C4C2D /* GoogleService-Info.plist */; };
 		BA271F8920516DE830DBF18B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		E1192501026205378F129D95 /* Pods_metro_MetroTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5DD8FC71C3122DD60298D5 /* Pods_metro_MetroTests.framework */; };
 		EA934A995C98F7BE3A630B82 /* Pods_metro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B58C8D58652173C42558FD7 /* Pods_metro.framework */; };
@@ -42,6 +44,8 @@
 		6B58C8D58652173C42558FD7 /* Pods_metro.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_metro.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B5DD8FC71C3122DD60298D5 /* Pods_metro_MetroTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_metro_MetroTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Metro/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		82C4F9122FE9D2F2003C4C2D /* metro.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = metro.entitlements; path = metro/metro.entitlements; sourceTree = "<group>"; };
+		82C4F9132FE9D3F9003C4C2D /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		951502C9E880EACA346DAC7D /* Pods-metro.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-metro.debug.xcconfig"; path = "Target Support Files/Pods-metro/Pods-metro.debug.xcconfig"; sourceTree = "<group>"; };
 		AD31E0CA493F8ACCD99BC658 /* Pods-metro-MetroTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-metro-MetroTests.release.xcconfig"; path = "Target Support Files/Pods-metro-MetroTests/Pods-metro-MetroTests.release.xcconfig"; sourceTree = "<group>"; };
 		C5FADB72AB54A17DBEE04B69 /* Pods-metro.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-metro.release.xcconfig"; path = "Target Support Files/Pods-metro/Pods-metro.release.xcconfig"; sourceTree = "<group>"; };
@@ -119,6 +123,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				82C4F9122FE9D2F2003C4C2D /* metro.entitlements */,
+				82C4F9132FE9D3F9003C4C2D /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* Metro */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* MetroTests */,
@@ -238,6 +244,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82C4F9142FE9D3F9003C4C2D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,6 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				82C4F9152FE9D3F9003C4C2D /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				BA271F8920516DE830DBF18B /* PrivacyInfo.xcprivacy in Resources */,
 			);
@@ -483,6 +491,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = metro/metro.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = K8959L5S8W;
 				ENABLE_BITCODE = NO;
@@ -513,6 +522,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = metro/metro.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = K8959L5S8W;
 				INFOPLIST_FILE = Metro/Info.plist;

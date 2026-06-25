@@ -1,0 +1,12 @@
+{
+   "SimulateTargetBundle": "com.metro.santiago",
+   "aps": {
+       "alert": {
+           "title": "Alerta Metro L5",
+           "body": "Frecuencia lenta en estación Santa Isabel por asistencia a pasajero."
+       },
+       "sound": "default"
+   },
+   "linea": "5",
+   "estado": "retraso"
+}

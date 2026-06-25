@@ -15,6 +15,8 @@ import Globals from './Globals'
 import { PlaybackService } from './js/services/PlaybackService'
 //import firebase from '@react-native-firebase/app';
 
+import messaging from '@react-native-firebase/messaging';
+
 
 let getData = async (key) => {
   try {
