@@ -11,11 +11,11 @@ import Globals from '../../Globals';
 
 const TOPICS_BY_PLATFORM = {
   android: {
-    all: 'all-android',
+    all: 'santiago-metro-all-android',
     beta: 'beta-android',
   },
   ios: {
-    all: 'all-ios',
+    all: 'santiago-metro-all-ios',
     beta: 'beta-ios',
   },
 };

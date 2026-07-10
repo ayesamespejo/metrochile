@@ -580,7 +580,7 @@ let styles = StyleSheet.create({
     //fontFamily: 'Helvetica-Bold',
     marginLeft: 'auto',
     marginRight: 'auto',
-    bottom: 10,
+    bottom: 11,
     textAlign: 'center',
     //fontSize: 25,
     color: '#FFFFFF',
