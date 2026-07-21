@@ -4,7 +4,7 @@
  *
  * @format
  */
-import React, { useEffect, useState, } from 'react'
+import React, { useEffect, useRef, useState, } from 'react'
 import {
   AppState,
   Platform,
@@ -92,6 +92,8 @@ import IntermodalidadScreen from './screens/IntermodalidadScreen'
 import SurveyPopup from './components/SurveyPopup';
 import DanosTuOpinion from './screens/DanosTuOpinion'
 import IncidentForm from './src/components/IncidentForm'
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import {setupFcm} from './src/notifications/fcmSetup';
 import messaging, {
@@ -99,12 +101,15 @@ import messaging, {
   onNotificationOpenedApp,
   getInitialNotification,
 } from '@react-native-firebase/messaging';
-import {logFcmManualPayload} from './src/notifications/fcmMessageUtils';
+
 import {
   navigateToNotifications,
   flushPendingNotificationNavigation,
 } from './src/notifications/fcmNavigation';
-
+import { saveFcmPush } from './fcmPushStore';
+import { handleIncomingFcmMessage } from './src/notifications/fcmMessageUtils';
+import PushInAppBanner from './src/notifications/PushInAppBanner';
+import { getActiveRouteName } from './src/navigation/getActiveRouteName';
 const PushNotification = require('react-native-push-notification');
 
 async function testFCM() {
@@ -909,6 +914,15 @@ export const renderMenuDrawerContent = (
 
 function App() {
   const [showSurvey, setShowSurvey] = useState(false);
+  const [pushBanner, setPushBanner] = useState({
+    visible: false,
+    title: '',
+    body: '',
+    remoteMessage: null,
+  });
+    const navigationRef = useRef(null);
+    const routeNameRef = useRef();
+
 console.log('-----------------------------testttt');
 
 useEffect(() => {
@@ -997,30 +1011,53 @@ const isRegistered = messaging().isDeviceRegisteredForRemoteMessages;
     let unsubscribeOnMessage = () => {};
     let unsubscribeNotificationOpened = () => {};
 
-    if (Platform.OS === 'android') {
-      unsubscribeOnMessage = messaging().onMessage(async remoteMessage => {
-        logFcmManualPayload(remoteMessage, 'FOREGROUND');
+    const messagingInstance = messaging();
+
+    unsubscribeOnMessage = onMessage(messagingInstance, async remoteMessage => {
+      await handleIncomingFcmMessage(remoteMessage, 'FOREGROUND');
+      const data = remoteMessage?.data ?? {};
+      const notification = remoteMessage?.notification ?? {};
+      const title =
+        data.title ?? notification.title ?? 'Nueva notificación';
+      const body =
+        data.body ??
+        notification.body ??
+        data.subtitle ??
+        'Toca para ver el detalle';
+
+      setPushBanner({
+        visible: true,
+        title,
+        body,
+        remoteMessage,
+      });
+    });
+
+
+     unsubscribeNotificationOpened = onNotificationOpenedApp(
+      messagingInstance,
+      remoteMessage => {
+        handleIncomingFcmMessage(remoteMessage, 'OPENED_FROM_BACKGROUND').catch(
+          error => {
+            console.warn('[FCM] Error guardando push abierto:', error);
+          },
+        );
+        navigateToNotifications(remoteMessage);
+      },
+    );
+
+    getInitialNotification(messagingInstance)
+      .then(async remoteMessage => {
+        if (remoteMessage) {
+          await handleIncomingFcmMessage(remoteMessage, 'COLD_START');
+          navigateToNotifications(remoteMessage);
+        }
+      })
+      .catch(error => {
+        console.warn('[FCM] Error en getInitialNotification:', error);
       });
 
-      unsubscribeNotificationOpened = messaging().onNotificationOpenedApp(
-        remoteMessage => {
-          logFcmManualPayload(remoteMessage, 'OPENED_FROM_BACKGROUND');
-          navigateToNotifications();
-        },
-      );
 
-      messaging()
-        .getInitialNotification()
-        .then(remoteMessage => {
-          if (remoteMessage) {
-            logFcmManualPayload(remoteMessage, 'COLD_START');
-            navigateToNotifications();
-          }
-        })
-        .catch(error => {
-          console.warn('[FCM] Error en getInitialNotification:', error);
-        });
-    }
     testFCM();
     
 
@@ -1206,7 +1243,28 @@ const isRegistered = messaging().isDeviceRegisteredForRemoteMessages;
   }, [])
   
   return (
-    <NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+       <NavigationContainer
+          ref={navigationRef}
+          onReady={() => {
+            routeNameRef.current = getActiveRouteName(
+              navigationRef.current?.getRootState(),
+            );
+          }}
+          onStateChange={async () => {
+            const previousRouteName = routeNameRef.current;
+            const currentRouteName = getActiveRouteName(
+              navigationRef.current?.getRootState(),
+            );
+
+            if (previousRouteName !== currentRouteName && currentRouteName) {
+              await logScreenView(currentRouteName);
+            }
+
+            routeNameRef.current = currentRouteName;
+          }}
+        > 
       <Drawer.Navigator  
         initialRouteName="Inicio"
         drawerContent={(props) => <AppMenu {...props} navigationParent={setNavigation} />}
@@ -1242,7 +1300,24 @@ const isRegistered = messaging().isDeviceRegisteredForRemoteMessages;
       </Drawer.Navigator>
        <StatusBar barStyle="dark-content"> </StatusBar>
        <SurveyPopup visible={showSurvey} onClose={() => setShowSurvey(false)} />
+        <PushInAppBanner
+            visible={pushBanner.visible}
+            title={pushBanner.title}
+            body={pushBanner.body}
+            onDismiss={() =>
+              setPushBanner(prev => ({
+                ...prev,
+                visible: false,
+                remoteMessage: null,
+              }))
+            }
+            onPress={() => {
+              navigateToNotifications(pushBanner.remoteMessage);
+            }}
+          />
     </NavigationContainer>
+    </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 

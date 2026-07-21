@@ -15,6 +15,10 @@ import Globals from './Globals'
 import { PlaybackService } from './js/services/PlaybackService'
 //import firebase from '@react-native-firebase/app';
 
+
+import { handleIncomingFcmMessage } from './src/notifications/fcmMessageUtils';
+import { setupUnhandledPromiseLogging } from './src/utils/webViewStability';
+
 import messaging from '@react-native-firebase/messaging';
 
 
@@ -163,6 +167,11 @@ PushNotification.configure({
   //requestPermissions: Platform.OS === 'ios',
 })
 
+
+
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  await handleIncomingFcmMessage(remoteMessage, 'BACKGROUND');
+});
 
 AppRegistry.registerComponent(appName, () => App);
 TrackPlayer.registerPlaybackService(() => PlaybackService)
