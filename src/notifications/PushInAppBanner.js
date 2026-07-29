@@ -17,6 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Notificaciones from '../../assets/svg/header/Notificaciones.svg';
 import Globals from '../../Globals';
 import Estilos from '../../Estilos';
+import { stripHtml } from './HtmlText';
 
 const AUTO_HIDE_MS = 5500;
 const ANIM_MS = 280;
@@ -135,12 +136,12 @@ export default function PushInAppBanner({
             <Text
               style={[styles.title, Estilos.tipografiaMedium]}
               numberOfLines={1}>
-              {title || 'Nueva notificación'}
+              {stripHtml(title) || 'Nueva notificación'}
             </Text>
             <Text
               style={[styles.body, Estilos.tipografiaLight]}
               numberOfLines={2}>
-              {body || 'Toca para ver el detalle'}
+              {stripHtml(body) || 'Toca para ver el detalle'}
             </Text>
           </View>
 

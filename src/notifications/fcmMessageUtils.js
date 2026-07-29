@@ -1,11 +1,11 @@
+import { saveFcmPush } from './fcmPushStore';
+
 /**
  * Extrae y registra en consola el payload definido por el manual de integración FCM.
  * @param {import('@react-native-firebase/messaging').FirebaseMessagingTypes.RemoteMessage | null | undefined} remoteMessage
  * @param {string} context Etiqueta del handler (BACKGROUND, FOREGROUND, etc.)
  * @returns {{ sender: string|null, title: string|null, subtitle: string|null, date: string|null, body: string|null }}
  */
-import { saveFcmPush } from './fcmPushStore';
-
 export function logFcmManualPayload(remoteMessage, context) {
   const data = remoteMessage?.data ?? {};
   const notification = remoteMessage?.notification;
@@ -28,7 +28,6 @@ export function logFcmManualPayload(remoteMessage, context) {
 
   return manualPayload;
 }
-
 
 /**
  * Log + persistencia local del push para la pantalla Notificaciones.

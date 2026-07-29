@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+  import React, { useState, useEffect, useCallback } from 'react';
 import {
   Pressable,
   RefreshControl,
@@ -18,34 +18,114 @@ import Globals from './Globals';
 import ConfigNotificaciones from './assets/svg/notificaciones/configNotificaciones.svg';
 import {
   FCM_PUSH_SAVED_EVENT,
+  formatChileDate,
   getStoredFcmPushes,
   mergeAlertasWithFcmPushes,
 } from './src/notifications/fcmPushStore';
-
+import NotificacionesIcon from './assets/svg/header/Notificaciones.svg';
+import { HtmlText } from './src/notifications/HtmlText';
+ 
 const WIDTH = Dimensions.get('window').height;
+function toLineaIconCode(raw) {
+  const value = String(raw || '')
+    .trim()
+    .toUpperCase();
 
+  if (!value || value === 'TR') {
+    return null;
+  }
+
+  if (value === 'L4A' || value === '4A') {
+    return '4A';
+  }
+
+  const match = value.match(/^L?([1-9])$/);
+  return match ? match[1] : null;
+}
+ 
 const styles = StyleSheet.create({
+  listContent: {
+    paddingTop: 20,
+    paddingBottom: 24,
+    paddingHorizontal: 4,
+  },
+  item: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 14,
+  },
+  itemRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  iconColumn: {
+    width: 40,
+    marginRight: 12,
+    marginTop: 2,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  iconSlot: {
+    width: 36,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bellWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 1.5,
+    borderColor: Globals.COLOR.GRIS_3 || '#AFB2BA',
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  contentColumn: {
+    flex: 1,
+    paddingRight: 4,
+  },
+  title: {
+    color: '#000000',
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 6,
+    lineHeight: 22,
+  },
+  subtitle: {
+    color: Globals.COLOR.GRIS_4 || '#43464E',
+    fontSize: 14,
+    marginBottom: 8,
+    lineHeight: 20,
+  },
+  body: {
+    color: '#000000',
+    fontSize: 15,
+    lineHeight: 22,
+    marginBottom: 4,
+  },
   date: {
     color: 'black',
     fontWeight: 'bold',
     fontSize: 16,
-    marginBottom: 5,
-    marginTop: 10,
+    marginBottom: 8,
+    lineHeight: 22,
   },
   text: {
     color: 'black',
     fontSize: 16,
-  },
-  subtitle: {
-    color: Globals.COLOR.GRIS_4 || '#666666',
-    fontSize: 14,
-    marginBottom: 4,
+    lineHeight: 22,
   },
   metaDate: {
-    color: '#000000',
-    fontSize: 14,
+    color: Globals.COLOR.GRIS_4 || '#43464E',
+    fontSize: 13,
     fontWeight: '600',
-    marginTop: 8,
+    marginTop: 10,
+  },
+  separator: {
+    borderBottomWidth: 1,
+    marginHorizontal: 16,
+    borderBottomColor: Globals.COLOR.GRIS_3,
   },
   menu: {
     margin: 10,
@@ -54,90 +134,99 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
 });
-
+ 
 const Item = ({ date, text, lineas, source, title, subtitle, body }) => {
   const isFcm = source === 'fcm';
-  const lineasSafe = Array.isArray(lineas) && lineas.length > 0 ? lineas : ['TR'];
-  const arregloTexto = String(text || '').split('<br>').filter(Boolean);
-  const [state, setState] = useState({
-    url: 'https://tk9ktk356f.execute-api.us-east-1.amazonaws.com/UAT/data',
-    data: [],
-    modalVisible: false,
-    refreshing: true,
-  })
+  const lineasSafe = Array.isArray(lineas) ? lineas : [];
+  const iconCodes = lineasSafe.map(toLineaIconCode).filter(Boolean);
+  const hasLineIcons = iconCodes.length > 0;
+  const arregloTexto = String(text || '')
+    .split('<br>')
+    .filter(Boolean);
 
   return (
     <View>
-      <View style={{ flexDirection: 'row', left: 20 }}>
-        <View style={{ justifyContent: 'center' }}>
-          {lineasSafe.map((e, i) => (
-            <TituloCirculoEstacion
-              key={`linea-${e}-${i}`}
-              texto={''}
-              linea={String(e).substring(1).toUpperCase()}
-              tamanoIcono={32}
-            />
-          ))}
-        </View>
-        <View
-          style={{
-            width: Dimensions.get('window').width - 120,
-            marginBottom: 20,
-            marginLeft: 10,
-          }}
-        >
-          {isFcm ? (
-            <>
-              <Text style={[styles.date, Estilos.tipografiaMedium]}>
-                {title || 'Notificación'}
-              </Text>
-              {!!subtitle && (
-                <Text style={[styles.subtitle, Estilos.tipografiaMedium]}>
-                  {subtitle}
-                </Text>
-              )}
-              {!!body && (
-                <Text style={[styles.text, Estilos.tipografiaLight]}>{body}</Text>
-              )}
-              {!body &&
-                arregloTexto
-                  .filter(line => line !== title && line !== subtitle)
-                  .map((texto, index) => (
-                    <Text
-                      key={index}
-                      style={[styles.text, Estilos.tipografiaLight]}>
-                      {texto}
-                    </Text>
-                  ))}
-              {!!date && (
-                <Text style={[styles.metaDate, Estilos.tipografiaMedium]}>
+      <View style={styles.item}>
+        <View style={styles.itemRow}>
+          <View style={styles.iconColumn}>
+            {hasLineIcons ? (
+              iconCodes.map((code, i) => (
+                <View key={`linea-${code}-${i}`} style={styles.iconSlot}>
+                  <TituloCirculoEstacion
+                    texto={''}
+                    linea={code}
+                    tamanoIcono={36}
+                  />
+                </View>
+              ))
+            ) : (
+              <View style={styles.bellWrap}>
+                <NotificacionesIcon
+                  width={20}
+                  height={20}
+                  fill={Globals.COLOR.ROJO_METRO}
+                />
+              </View>
+            )}
+          </View>
+
+          <View style={styles.contentColumn}>
+            {isFcm ? (
+              <>
+                <HtmlText
+                  html={title || 'Notificación'}
+                  style={[styles.title, Estilos.tipografiaMedium]}
+                />
+                {!!subtitle && (
+                  <HtmlText
+                    html={subtitle}
+                    style={[styles.subtitle, Estilos.tipografiaMedium]}
+                  />
+                )}
+                {!!body && (
+                  <HtmlText
+                    html={body}
+                    style={[styles.body, Estilos.tipografiaLight]}
+                  />
+                )}
+                {!body &&
+                  arregloTexto
+                    .filter(line => line !== title && line !== subtitle)
+                    .map((texto, index) => (
+                      <HtmlText
+                        key={index}
+                        html={texto}
+                        style={[styles.body, Estilos.tipografiaLight]}
+                      />
+                    ))}
+                {!!date && (
+                  <Text style={[styles.metaDate, Estilos.tipografiaMedium]}>
+                    {formatChileDate(date)}
+                  </Text>
+                )}
+              </>
+            ) : (
+              <>
+                <Text style={[styles.date, Estilos.tipografiaMedium]}>
                   {date}
                 </Text>
-              )}
-            </>
-          ) : (
-            <>
-              <Text style={[styles.date, Estilos.tipografiaMedium]}>{date}</Text>
-              {arregloTexto.map((texto, index) => (
-                <Text key={index} style={[styles.text, Estilos.tipografiaLight]}>
-                  {texto}
-                </Text>
-              ))}
-            </>
-          )}
+                {arregloTexto.map((texto, index) => (
+                  <Text
+                    key={index}
+                    style={[styles.text, Estilos.tipografiaLight]}>
+                    {texto}
+                  </Text>
+                ))}
+              </>
+            )}
+          </View>
         </View>
       </View>
-      <View
-        style={{
-          borderBottomWidth: 1,
-          marginHorizontal: 10,
-          borderBottomColor: Globals.COLOR.GRIS_3,
-        }}
-      />
+      <View style={styles.separator} />
     </View>
   );
 };
-
+ 
 const Alerta = props => {
   const [state, setState] = useState({
     url: '',
@@ -145,7 +234,7 @@ const Alerta = props => {
     modalVisible: false,
     refreshing: true,
   });
-
+ 
   const convertChileanTZ = (date, tzString) => {
     return new Date(
       (typeof date === 'string' ? new Date(date) : date).toLocaleString(
@@ -154,7 +243,7 @@ const Alerta = props => {
       ),
     );
   };
-
+ 
   const getTextoFinal = txt => {
     let texto = removeURLS(txt.replace(/<[^>]*>?/gm, ''));
     let indexRevisa = texto.toLowerCase().indexOf('revisa');
@@ -164,7 +253,7 @@ const Alerta = props => {
     }
     return textoFinal.replace(/(\r\n|\r|\n|\\n)/g, '<br>');
   };
-
+ 
   const removeURLS = txt => {
     var comps = txt.split(' ');
     comps.forEach(w => {
@@ -172,10 +261,10 @@ const Alerta = props => {
     });
     return comps.join(' ');
   };
-
+ 
   const mapApiElementsToAlertas = elements => {
     let alertas = [];
-
+ 
     elements
       .filter(element => element.timestamp != undefined)
       .forEach(element => {
@@ -198,66 +287,74 @@ const Alerta = props => {
           source: 'api',
         });
       });
-
+ 
     return alertas;
   };
-
+ 
   const getDatos = useCallback(async () => {
-    setState(prev => ({ ...prev, refreshing: true }));
+  setState(prev => ({
+    ...prev,
+    refreshing: true,
+  }));
+
+  try {
+    const response = await fetch(state.url);
+
+    const json = await response.json();
+
+    let apiAlertas = [];
+
+    if (response.ok) {
+      apiAlertas = mapApiElementsToAlertas(json.Items);
+    } else {
+      console.log("API Error:", response.status);
+    }
+
+    const fcmPushes = await getStoredFcmPushes();
+
+    const merged = mergeAlertasWithFcmPushes(
+      apiAlertas,
+      fcmPushes,
+    );
+
+    setState(prev => ({
+      ...prev,
+      data: merged,
+      refreshing: false,
+    }));
+
+  } catch (error) {
+
+    console.log(error);
 
     try {
-      const { url } = state
-    setState({ ...state, refreshing: true })
-    fetch(url)
-      .then((response) => response.json())
-      .then((json) => {
-         getStoredFcmPushes();
 
-       let apiAlertas = []; 
-       if(response.ok){
-          const  elements = json.Items;
-           apiAlertas = mapApiElementsToAlertas(elements);
-       } else {
-        console.log(`API error: ${response.status}`);
-       }
-      
-       const merged = mergeAlertasWithFcmPushes(apiAlertas, fcmPushes);
-       setState(prev => ({ ...prev, data: merged, refreshing: false }));      
+      const fcmPushes = await getStoredFcmPushes();
 
-      })
-/*
-      const [response, fcmPushes] = await Promise.all([
-        
-        signedFetch('GET', '/data'),
+      const merged = mergeAlertasWithFcmPushes(
+        [],
+        fcmPushes,
+      );
 
-        getStoredFcmPushes(),
-      ]);
+      setState(prev => ({
+        ...prev,
+        data: merged,
+        refreshing: false,
+      }));
 
-      let apiAlertas = [];
+    } catch {
 
-      if (response.ok) {
-        const json = await response.json();
-        console.log('informacion: ', json);
-        const elements = json.Items || [];
-        apiAlertas = mapApiElementsToAlertas(elements);
-      } else {
-        console.log(`API error: ${response.status}`);
-      }
+      setState(prev => ({
+        ...prev,
+        refreshing: false,
+      }));
 
-      const merged = mergeAlertasWithFcmPushes(apiAlertas, fcmPushes);
-      setState(prev => ({ ...prev, data: merged, refreshing: false }));*/
-    } catch (error) {
-      console.warn('[Alerta] Error cargando notificaciones:', error);
-      try {
-        const fcmPushes = await getStoredFcmPushes();
-        const merged = mergeAlertasWithFcmPushes([], fcmPushes);
-        setState(prev => ({ ...prev, data: merged, refreshing: false }));
-      } catch {
-        setState(prev => ({ ...prev, refreshing: false }));
-      }
     }
-  }, []);
 
+  }
+
+}, [state.url]);
+ 
   useEffect(() => {
     props.navigation.setOptions({
       headerShown: true,
@@ -276,26 +373,26 @@ const Alerta = props => {
         </Pressable>
       ),
     });
-
+ 
     const unsubscribeFocus = props.navigation.addListener('focus', () => {
       getDatos();
     });
-
+ 
     const unsubscribePush = DeviceEventEmitter.addListener(
       FCM_PUSH_SAVED_EVENT,
       () => {
         getDatos();
       },
     );
-
+ 
     getDatos();
-
+ 
     return () => {
       unsubscribeFocus();
       unsubscribePush.remove();
     };
   }, [getDatos, props.navigation]);
-
+ 
   const renderItem = ({ item }) => {
     return (
       <Item
@@ -309,54 +406,47 @@ const Alerta = props => {
       />
     );
   };
-
+ 
   const updateData = () => {
     getDatos();
   };
-
+ 
   const { data } = state;
   if (state.refreshing && data.length === 0) {
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        <View style={{ marginTop: WIDTH / 2.5 }}>
-          <ActivityIndicator size="large" color="#43464E" />
+          <View style={{ marginTop: Dimensions.get('window').height / 2.5 }}>
         </View>
       </SafeAreaView>
     );
   }
-
+ 
   return (
-    <View>
-      <View
-        style={{
-          height: Dimensions.get('window').height - 65,
-          paddingHorizontal: WIDTH * 0.02,
-          paddingBottom: WIDTH * 0.1,
-        }}
-      >
-        <FlatList
-          refreshControl={
-            <RefreshControl
-              onRefresh={updateData}
-              refreshing={state.refreshing}
-            />
-          }
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(item, index) =>
-            item.id || `${item.source || 'item'}_${index}_${item.date}`
-          }
-          ListEmptyComponent={
-            <View style={{ padding: 24, alignItems: 'center' }}>
-              <Text style={[styles.text, Estilos.tipografiaLight]}>
-                No hay notificaciones por ahora.
-              </Text>
-            </View>
-          }
-        />
-      </View>
+    <View style={{ flex: 1 }}>
+      <FlatList
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.listContent}
+        refreshControl={
+          <RefreshControl
+            onRefresh={updateData}
+            refreshing={state.refreshing}
+          />
+        }
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item, index) =>
+          item.id || `${item.source || 'item'}_${index}_${item.date}`
+        }
+        ListEmptyComponent={
+          <View style={{ padding: 24, alignItems: 'center' }}>
+            <Text style={[styles.text, Estilos.tipografiaLight]}>
+              No hay notificaciones por ahora.
+            </Text>
+          </View>
+        }
+      />
     </View>
   );
 };
-
+ 
 export default Alerta;

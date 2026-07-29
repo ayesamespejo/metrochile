@@ -6,19 +6,86 @@ export const FCM_PUSH_SAVED_EVENT = 'fcm_push_saved';
 
 const MAX_STORED_PUSHES = 100;
 
-function formatChileDate(date) {
+function pad2(value) {
+  return String(value).padStart(2, '0');
+}
+
+/**
+ * Formato chileno 24h: DD-MM-YYYY HH:mm (America/Santiago).
+ */
+export function formatChileDate(dateInput) {
   try {
-    return date.toLocaleString('es-CL', {
+    const date =
+      dateInput instanceof Date ? dateInput : parseFlexibleDate(dateInput);
+
+    if (!date || Number.isNaN(date.getTime())) {
+      return String(dateInput || '');
+    }
+
+    const parts = new Intl.DateTimeFormat('en-GB', {
       timeZone: 'America/Santiago',
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-    });
+      hourCycle: 'h23',
+    }).formatToParts(date);
+
+    const get = type => parts.find(part => part.type === type)?.value || '';
+    return `${get('day')}-${get('month')}-${get('year')} ${get('hour')}:${get(
+      'minute',
+    )}`;
   } catch {
-    return date.toISOString();
+    if (dateInput instanceof Date) {
+      return `${pad2(dateInput.getDate())}-${pad2(
+        dateInput.getMonth() + 1,
+      )}-${dateInput.getFullYear()} ${pad2(dateInput.getHours())}:${pad2(
+        dateInput.getMinutes(),
+      )}`;
+    }
+    return String(dateInput || '');
   }
+}
+
+function parseFlexibleDate(value) {
+  if (!value) {
+    return null;
+  }
+
+  if (value instanceof Date) {
+    return value;
+  }
+
+  const raw = String(value).trim();
+  if (!raw) {
+    return null;
+  }
+
+  const normalized = raw
+    .replace(/\s+/g, ' ')
+    .replace(/(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s*([+-]\d{4})/, '$1T$2$3')
+    .replace(/([+-]\d{2})(\d{2})$/, '$1:$2');
+
+  const parsed = new Date(normalized);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed;
+  }
+
+  const match = raw.match(
+    /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?(?:\s*([+-]\d{4}|Z))?$/,
+  );
+  if (match) {
+    const [, y, m, d, hh, mm, ss = '00', tz = '+0000'] = match;
+    if (tz === 'Z') {
+      return new Date(`${y}-${m}-${d}T${hh}:${mm}:${ss}Z`);
+    }
+    const sign = tz.startsWith('-') ? '-' : '+';
+    const tzNorm = `${sign}${tz.slice(1, 3)}:${tz.slice(3, 5)}`;
+    return new Date(`${y}-${m}-${d}T${hh}:${mm}:${ss}${tzNorm}`);
+  }
+
+  return null;
 }
 
 function getLineasFromText(txt) {
@@ -33,7 +100,7 @@ function getLineasFromText(txt) {
     resultado.push('TR');
   }
 
-  const matches = s.match(/(L[0-6])/gi);
+  const matches = s.match(/(L[1-9]|L4A)/gi);
   if (matches) {
     matches.forEach(i => {
       const upper = i.toUpperCase();
@@ -41,10 +108,6 @@ function getLineasFromText(txt) {
         resultado.push(upper);
       }
     });
-  }
-
-  if (resultado.length === 0) {
-    resultado.push('TR');
   }
 
   return resultado.sort();
@@ -67,7 +130,9 @@ export function normalizeFcmToAlertaItem(remoteMessage) {
     `fcm_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
   const receivedAt = new Date();
-  const dateLabel = data.date ? String(data.date) : formatChileDate(receivedAt);
+  const dateLabel = data.date
+    ? formatChileDate(data.date)
+    : formatChileDate(receivedAt);
 
   const textParts = [];
   if (title) {
