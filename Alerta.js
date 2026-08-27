@@ -21,6 +21,7 @@ import {
   formatChileDate,
   getStoredFcmPushes,
   mergeAlertasWithFcmPushes,
+  resolveFcmDisplayFields,
 } from './src/notifications/fcmPushStore';
 import NotificacionesIcon from './assets/svg/header/Notificaciones.svg';
 import { HtmlText } from './src/notifications/HtmlText';
@@ -140,6 +141,9 @@ const Item = ({ date, text, lineas, source, title, subtitle, body }) => {
   const lineasSafe = Array.isArray(lineas) ? lineas : [];
   const iconCodes = lineasSafe.map(toLineaIconCode).filter(Boolean);
   const hasLineIcons = iconCodes.length > 0;
+  const display = isFcm
+    ? resolveFcmDisplayFields({ title, subtitle, body })
+    : { title, subtitle, body };
   const arregloTexto = String(text || '')
     .split('<br>')
     .filter(Boolean);
@@ -174,24 +178,27 @@ const Item = ({ date, text, lineas, source, title, subtitle, body }) => {
             {isFcm ? (
               <>
                 <HtmlText
-                  html={title || 'Notificación'}
+                  html={display.title || 'Notificación'}
                   style={[styles.title, Estilos.tipografiaMedium]}
                 />
                 {!!subtitle && (
                   <HtmlText
-                    html={subtitle}
+                    html={display.subtitle}
                     style={[styles.subtitle, Estilos.tipografiaMedium]}
                   />
                 )}
-                {!!body && (
+                {!!display.body && (
                   <HtmlText
-                    html={body}
+                    html={display.body}
                     style={[styles.body, Estilos.tipografiaLight]}
                   />
                 )}
                 {!body &&
                   arregloTexto
-                    .filter(line => line !== title && line !== subtitle)
+                    .filter(
+                      line =>
+                        line !== display.title && line !== display.subtitle,
+                    )
                     .map((texto, index) => (
                       <HtmlText
                         key={index}

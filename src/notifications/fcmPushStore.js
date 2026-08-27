@@ -5,15 +5,146 @@ export const FCM_PUSH_STORAGE_KEY = '@fcm_push_notifications';
 export const FCM_PUSH_SAVED_EVENT = 'fcm_push_saved';
 
 const MAX_STORED_PUSHES = 100;
+const CHILE_DATE_LABEL_RE =
+  /^(\d{2})-(\d{2})-(\d{4})(?:[ T](\d{2}):(\d{2})(?::(\d{2}))?)?$/;
 
 function pad2(value) {
   return String(value).padStart(2, '0');
+}
+
+function repairChileYear(year) {
+  const numeric = Number(year);
+  if (!Number.isFinite(numeric)) {
+    return year;
+  }
+  if (numeric >= 0 && numeric < 100) {
+    return String(2000 + numeric);
+  }
+  if (year.startsWith('00') && year.length === 4) {
+    return `20${year.slice(2)}`;
+  }
+  return year;
+}
+
+/**
+ * Si ya viene en DD-MM-YYYY HH:mm, no volver a parsear (evita el año 0018).
+ */
+function asChileDateLabel(value) {
+  const raw = String(value || '').trim();
+  const match = raw.match(CHILE_DATE_LABEL_RE);
+  if (!match) {
+    return null;
+  }
+
+  const [, day, month, year, hour = '00', minute = '00'] = match;
+  return `${day}-${month}-${repairChileYear(year)} ${hour}:${minute}`;
+}
+
+function comparablePushText(value) {
+  return String(value || '')
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/<\/?[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/[.…]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+/**
+ * True si `preview` es el mismo texto (o un recorte) de `full`.
+ */
+export function isRedundantPreview(preview, full) {
+  const a = comparablePushText(preview);
+  const b = comparablePushText(full);
+  if (!a) {
+    return true;
+  }
+  if (!b) {
+    return false;
+  }
+  if (a === b) {
+    return true;
+  }
+  if (b.startsWith(a) || a.startsWith(b)) {
+    return true;
+  }
+  if (a.length >= 24 && b.includes(a)) {
+    return true;
+  }
+  if (b.length >= 24 && a.includes(b)) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * El PD de evaluación lo manda Transapp/Metro en el body; la app no lo genera.
+ */
+function stripEvaluanosPostscript(value) {
+  const raw = String(value ?? '');
+  if (!raw) {
+    return raw;
+  }
+
+  const marker = raw.search(
+    /P\.?\s*D\.?\s*:?\s*No olvides evaluarnos|No olvides evaluarnos/i,
+  );
+  if (marker === -1) {
+    return raw.trim();
+  }
+
+  let cut = marker;
+  const leadingJunk = raw
+    .slice(0, marker)
+    .match(/(?:<br\s*\/?>|<\/p>|<p[^>]*>|\s)+$/i);
+  if (leadingJunk) {
+    cut = marker - leadingJunk[0].length;
+  }
+
+  return raw
+    .slice(0, cut)
+    .replace(/(?:<br\s*\/?>|\s)+$/gi, '')
+    .trim();
+}
+
+function sanitizeFcmField(value) {
+  if (!value) {
+    return null;
+  }
+  const cleaned = stripEvaluanosPostscript(String(value));
+  return cleaned || null;
+}
+
+export function resolveFcmDisplayFields({ title, subtitle, body } = {}) {
+  const nextTitle = sanitizeFcmField(title);
+  const nextBody = sanitizeFcmField(body);
+  let nextSubtitle = sanitizeFcmField(subtitle);
+
+  if (
+    nextSubtitle &&
+    ((nextTitle && isRedundantPreview(nextSubtitle, nextTitle)) ||
+      (nextBody && isRedundantPreview(nextSubtitle, nextBody)))
+  ) {
+    nextSubtitle = null;
+  }
+
+  return {
+    title: nextTitle,
+    subtitle: nextSubtitle,
+    body: nextBody,
+  };
 }
 
 /**
  * Formato chileno 24h: DD-MM-YYYY HH:mm (America/Santiago).
  */
 export function formatChileDate(dateInput) {
+  const alreadyFormatted = asChileDateLabel(dateInput);
+  if (alreadyFormatted) {
+    return alreadyFormatted;
+  }
+
   try {
     const date =
       dateInput instanceof Date ? dateInput : parseFlexibleDate(dateInput);
@@ -60,6 +191,15 @@ function parseFlexibleDate(value) {
   const raw = String(value).trim();
   if (!raw) {
     return null;
+  }
+
+  const chileLabel = raw.match(CHILE_DATE_LABEL_RE);
+  if (chileLabel) {
+    const [, day, month, year, hour = '00', minute = '00', second = '00'] =
+      chileLabel;
+    return new Date(
+      `${repairChileYear(year)}-${month}-${day}T${hour}:${minute}:${second}`,
+    );
   }
 
   const normalized = raw
@@ -120,9 +260,14 @@ export function normalizeFcmToAlertaItem(remoteMessage) {
   const data = remoteMessage?.data ?? {};
   const notification = remoteMessage?.notification ?? {};
 
-  const title = data.title ?? notification.title ?? '';
-  const subtitle = data.subtitle ?? '';
-  const body = data.body ?? notification.body ?? '';
+  const display = resolveFcmDisplayFields({
+    title: data.title ?? notification.title ?? '',
+    subtitle: data.subtitle ?? '',
+    body: data.body ?? notification.body ?? '',
+  });
+  const title = display.title || '';
+  const subtitle = display.subtitle || '';
+  const body = display.body || '';
   const sender = data.sender ?? '';
   const messageId =
     remoteMessage?.messageId ??
